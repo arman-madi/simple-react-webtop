@@ -5,7 +5,7 @@ class Taskbar extends Component {
     render() {
         return (
             <div className="taskbar">
-                
+                {this.props.children}
             </div>
         );
     }

@@ -1,7 +1,13 @@
 .taskbar {
-    display: block;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     width: 100%;
     height: 50px;
-    background-color: blueviolet
+    background-color: black;
+}
 
+.taskbar .shortcut {
+    height: 30px;
+    width: 30px;
 }
