@@ -6,7 +6,7 @@ You need to make sure that Node is installed on your compuetr and you have the l
 ### `npm` or `yarn`
 From the terminal go to the project folder and run either command `npm` or `yarn`, depends on which package manager are you working with.<br>
 
-### `npm start` or `yarn start
+### `npm start` or `yarn start`
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
