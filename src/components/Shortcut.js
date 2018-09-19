@@ -4,7 +4,7 @@ import './Shortcut.css';
 class Shortcut extends Component {
     render() {
         return (
-            <div id={this.props.key?this.props.key:'shortcut'} className='shortcut' title='Shortcut' {...this.props.attributes}/>
+            <div className='shortcut' title='Shortcut' {...this.props.attributes}/>
         );
     }
 }
