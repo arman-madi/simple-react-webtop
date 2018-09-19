@@ -25,7 +25,12 @@ class Desktop extends Component {
         this.setState({
             childrenExtraAttributes: {
                 ...this.state.childrenExtraAttributes,
-                [childKey]: {top: e.clientY+'px', left: e.clientX+'px', ...this.state.childrenExtraAttributes[childKey]}
+                [childKey]: {...this.state.childrenExtraAttributes[childKey],
+                    style:{
+                    ...this.state.childrenExtraAttributes[childKey].style,
+                    top: e.clientY+'px', 
+                    left: e.clientX+'px'
+                }}
             }
         })
 
@@ -40,13 +45,10 @@ class Desktop extends Component {
                     if (childrenKeys.hasOwnProperty(childKey)) {
                         console.log('ERROR: Duplicate key "' + childKey + '" has been found in Desktop children which one of them will be ignored')
                         return null
-                        //let oldKey = childKey
-                        //while (this.state.childrenExtraAttributes.hasOwnProperty(childKey = oldKey + "_" + index)) {++index}
                     }
                 }else {
                     console.log('ERROR: A child('+child.type.name+') does not have key, only children with unique key will be accepted by Desktop')
                     return null
-                    //while (this.state.childrenExtraAttributes.hasOwnProperty(childKey = child.type.name + "_" + index)) {++index}
                 }
         
                 if (!this.state.childrenExtraAttributes.hasOwnProperty(childKey)){
@@ -58,13 +60,14 @@ class Desktop extends Component {
                 if (['Shortcut', 'Window'].indexOf(child.type.name) > -1){
                     // eslint-disable-next-line
                     this.state.childrenExtraAttributes[childKey] = {
+                        ...this.state.childrenExtraAttributes[childKey],
                         draggable: true, 
-                        onDragStart: (e) => {
-                            console.log("DRAG START: " + childKey)
-                            //e.dataTransfer.effectAllowed = 'copy' // only dropEffect='copy' will be dropable
-                            // TODO: investigate what is the best data to transfer
-                            e.dataTransfer.setData('text/plain', childKey)
-                    }}
+                        onDragStart: (e) => {e.dataTransfer.setData('text/plain', childKey)},
+                        style:{
+                            ...this.state.childrenExtraAttributes[childKey].style,
+                            position: 'absolute'
+                        }
+                    }
 
                     childrenKeys[childKey] = this.state.childrenExtraAttributes[childKey]
                 }
