@@ -68,10 +68,6 @@ class Desktop extends Component {
                         let shiftX = e.clientX - e.currentTarget.getBoundingClientRect().left
                         let shiftY = e.clientY - e.currentTarget.getBoundingClientRect().top
                         e.dataTransfer.setData('text/plain', JSON.stringify({ key: childKey, shiftY: shiftY, shiftX: shiftX }))
-                    },
-                    style: {
-                        ...this.state.childrenExtraAttributes[childKey].style,
-                        position: 'absolute'
                     }
                 }
 

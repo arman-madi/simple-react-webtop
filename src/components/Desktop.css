@@ -7,6 +7,9 @@
 }
 
 .desktop .shortcut {
-    height: 100px;
-    width: 100px;
+    min-height: 64px;
+    min-width: 64px;
+    position: absolute;
+    margin: 0;
+    padding: 0;
 }

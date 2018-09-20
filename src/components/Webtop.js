@@ -10,11 +10,16 @@ class Webtop extends Component {
         return (
             <div className="webtop">
                 <Desktop>
-                    <Shortcut key='shortcut_1'/>
-                    <Window key='window_2' title='hello'><h1>Hello World</h1></Window>
+
+                    <Shortcut key='sh_mycomputer' name='My Computer' title='My Computer'
+                        icon="./images/icon-96-mycomputer.png"
+                        link='mycompute-dialog'
+                    />
+
+                    <Window key='window_2' title='Hello'><h1>Hello World</h1></Window>
                 </Desktop>
                 <Taskbar>
-                        <Shortcut />
+                    <Shortcut />
                 </Taskbar>
             </div>
         );
