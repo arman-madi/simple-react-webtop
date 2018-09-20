@@ -62,6 +62,7 @@ class Desktop extends Component {
             if (['Shortcut', 'Window'].indexOf(child.type.name) > -1) {
                 // eslint-disable-next-line
                 this.state.childrenExtraAttributes[childKey] = {
+                    ...child.props.attributes,
                     ...this.state.childrenExtraAttributes[childKey],
                     draggable: true,
                     onDragStart: (e) => {
