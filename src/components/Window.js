@@ -12,7 +12,9 @@ class Window extends Component {
                 <button className="minimize"/>
             </div>
             <div className="content">
-                {this.props.children}
+                <div>
+                    {this.props.children}
+                </div>
             </div>
             </div>
         );
