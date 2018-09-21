@@ -5,12 +5,22 @@ class Desktop extends Component {
 
     constructor(props) {
         super(props)
-        this.state = { childrenExtraAttributes: { TEST: "test" } }
+        this.state = { children: {} }
 
         this.onDropHandler = this.onDropHandler.bind(this)
+        this.unmountChild = this.unmountChild.bind(this)
     }
-    componentDidMount() {
 
+    unmountChild(id) {
+        this.setState({
+            children:{
+                ...this.state.children,
+                [id]:{
+                    ...this.state.children[id],
+                    active: false
+                }
+            }
+        })
     }
 
     onDragOverHandler(e) {
@@ -19,18 +29,22 @@ class Desktop extends Component {
 
     onDropHandler(e) {
         let childData = JSON.parse(e.dataTransfer.getData('text'))
-        let childKey = childData.key
+        let childId = childData.id
         let shiftX = childData.shiftX
         let shiftY = childData.shiftY
+        let childState = this.state.children[childId]
         this.setState({
-            childrenExtraAttributes: {
-                ...this.state.childrenExtraAttributes,
-                [childKey]: {
-                    ...this.state.childrenExtraAttributes[childKey],
-                    style: {
-                        ...this.state.childrenExtraAttributes[childKey].style,
-                        top: (e.clientY - shiftY) + 'px',
-                        left: (e.clientX - shiftX) + 'px'
+            children: {
+                ...this.state.children,
+                [childId]: {
+                    ...childState,
+                    extraAttributes: {
+                        ...childState.extraAttributes,
+                        style: {
+                            ...childState.extraAttributes.style,
+                            top: (e.clientY - shiftY) + 'px',
+                            left: (e.clientX - shiftX) + 'px'
+                        }
                     }
                 }
             }
@@ -40,43 +54,48 @@ class Desktop extends Component {
 
     render() {
 
-        let childrenKeys = {}
-        let dragableChildren = React.Children.map(this.props.children, (child, index) => {
-            let childKey = child.key
-            if (childKey) {
-                if (childrenKeys.hasOwnProperty(childKey)) {
-                    console.log('ERROR: Duplicate key "' + childKey + '" has been found in Desktop children which one of them will be ignored')
+        let childrenIds = {}
+        let children = React.Children.map(this.props.children, (child, index) => {
+            let childId = child.props.id ? child.props.id : child.key
+            if (childId) {
+                if (childrenIds.hasOwnProperty(childId)) {
+                    console.log('ERROR: Duplicate id "' + childId + '" has been found in Desktop children which one of them will be ignored')
                     return null
                 }
             } else {
-                console.log('ERROR: A child(' + child.type.name + ') does not have key, only children with unique key will be accepted by Desktop')
+                console.log('ERROR: A child(' + child.type.name + ') does not have id, only children with unique id will be accepted by Desktop')
                 return null
             }
 
-            if (!this.state.childrenExtraAttributes.hasOwnProperty(childKey)) {
+            if (!this.state.children.hasOwnProperty(childId)) {
                 // eslint-disable-next-line
-                this.state.childrenExtraAttributes[childKey] = {}
-                childrenKeys[childKey] = {}
+                this.state.children[childId] = {active:true, extraAttributes: {...child.props.attributes}}
+                childrenIds[childId] = true
             }
 
             if (['Shortcut', 'Window'].indexOf(child.type.name) > -1) {
                 // eslint-disable-next-line
-                this.state.childrenExtraAttributes[childKey] = {
+                this.state.children[childId].extraAttributes = {
                     ...child.props.attributes,
-                    ...this.state.childrenExtraAttributes[childKey],
+                    ...this.state.children[childId].extraAttributes,
                     draggable: true,
                     onDragStart: (e) => {
                         let shiftX = e.clientX - e.currentTarget.getBoundingClientRect().left
                         let shiftY = e.clientY - e.currentTarget.getBoundingClientRect().top
-                        e.dataTransfer.setData('text/plain', JSON.stringify({ key: childKey, shiftY: shiftY, shiftX: shiftX }))
+                        e.dataTransfer.setData('text/plain', JSON.stringify({ id: childId, shiftY: shiftY, shiftX: shiftX }))
                     }
                 }
 
-                childrenKeys[childKey] = this.state.childrenExtraAttributes[childKey]
+                childrenIds[childId] = true
             }
 
-            return React.cloneElement(child, { key: childKey, attributes: this.state.childrenExtraAttributes[childKey] })
-        })
+            if (!this.state.children[childId].active){
+                return undefined
+            }
+
+            return React.cloneElement(child, { id: childId, unmountMe:this.unmountChild, attributes: this.state.children[childId].extraAttributes })
+
+        }).filter((c)=>c)
 
         return (
 
@@ -84,7 +103,7 @@ class Desktop extends Component {
                 onDragOver={this.onDragOverHandler}
                 onDrop={this.onDropHandler}
             >
-                {dragableChildren}
+                {children}
             </div>
         )
     }

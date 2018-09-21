@@ -61,7 +61,7 @@
 
 .window .content{
     background-color: white;
-    display: -webkit-box;
+    display: block;
     width: 100%;
     height: 100%;
 }

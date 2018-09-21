@@ -18,7 +18,10 @@ class Webtop extends Component {
 
                     <Window key='window_2' title='Title' attributes={{style:{top:'300px', left:'300px'}}}><h1>Hello World</h1></Window>
                     <Window key='window_3' title='My Computer' attributes={{style:{top:'200px', left:'200px'}}}><h2>Directory Structure</h2></Window>
-                    <Window key='window_4' title='System Preferences' attributes={{style:{top:'100px', left:'100px'}}}><h3>Control Panel</h3></Window>
+                    <Window key='window_4' title='System Preferences' attributes={{style:{top:'100px', left:'100px'}}}>
+                        <h3>Control Panel</h3>
+                        <p>This is a panel for setting up the system</p>
+                    </Window>
                 </Desktop>
                 <Taskbar>
                     <Shortcut />
