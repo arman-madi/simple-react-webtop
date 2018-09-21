@@ -6,9 +6,16 @@ class Desktop extends Component {
     constructor(props) {
         super(props)
         this.state = { children: {} }
+        this.toBeRenderedChildren = {}
 
         this.onDropHandler = this.onDropHandler.bind(this)
+        this.onChildChange = this.onChildChange.bind(this)
         this.unmountChild = this.unmountChild.bind(this)
+    }
+
+    onChildChange(tag, id) {
+        if (this.props.onChange)
+            this.props.onChange(tag, id, this.toBeRenderedChildren[id].type)
     }
 
     unmountChild(id) {
@@ -54,6 +61,7 @@ class Desktop extends Component {
 
     render() {
 
+        this.toBeRenderedChildren = {}
         let childrenIds = {}
         let children = React.Children.map(this.props.children, (child, index) => {
             let childId = child.props.id ? child.props.id : child.key
@@ -93,7 +101,15 @@ class Desktop extends Component {
                 return undefined
             }
 
-            return React.cloneElement(child, { id: childId, unmountMe:this.unmountChild, attributes: this.state.children[childId].extraAttributes })
+            this.toBeRenderedChildren[childId] = {}
+            this.toBeRenderedChildren[childId].type = child.type.name
+
+            return React.cloneElement(child, { key: childId, id: childId, 
+                    ref:(rf)=>this.toBeRenderedChildren[childId].ref = rf, 
+                    onChange:this.onChildChange,
+                    unmountMe:this.unmountChild, 
+                    attributes: this.state.children[childId].extraAttributes 
+                })
 
         }).filter((c)=>c)
 

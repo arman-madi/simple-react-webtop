@@ -6,10 +6,15 @@ import Window from './Window';
 import Taskbar from './Taskbar';
 
 class Webtop extends Component {
+    
+    onChange(tag, id, type) {
+        console.log('Webtop: on chainge '+tag+' '+id+' '+type)
+    }
+
     render() {
         return (
             <div className="webtop">
-                <Desktop>
+                <Desktop onChange={(tag, id, type)=>this.onChange(tag, id, type)}>
 
                     <Shortcut key='sh_mycomputer' name='My Computer' title='My Computer'
                         icon="./images/icon-96-mycomputer.png"
